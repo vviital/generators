@@ -1,14 +1,13 @@
-function* createHello() {
-	try {
-		const word = yield;
-		console.log(`Hello ${word}`);
-	} catch (err) {
-		console.log('ERROR', err);
-	}
+function* createCounter() {
+	yield 1;
+	yield 2;
+	yield 3;
+	yield 4;
+	yield 5;
 }
 
-const hello = createHello();
+const counter = createCounter();
 
-hello.next();
-hello.throw('Something went wrong.');
-hello.next('Max');
+for (let i of counter) {
+	console.log(i);
+}
