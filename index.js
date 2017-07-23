@@ -1,18 +1,16 @@
-function* create3to4Counter() {
-	yield 3;
-	return 4;
+const url = 'http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json';
+const fetch = require('node-fetch');
+
+function* createQuoteFetcher() {
+	const response = yield fetch(url);
+	const quote = yield response.json();
+	return `${quote.quoteText} - ${quote.quoteAuthor}`;
 }
 
-function* createCounter() {
-	yield 1;
-	yield 2;
-	const four = yield* create3to4Counter();
-	console.log(four);
-	yield 5;
-}
+const quoteFetcher = createQuoteFetcher();
 
-const counter = createCounter();
-
-for(let i of counter) {
-	console.log(i);
-}
+quoteFetcher.next().value
+	.then(res => quoteFetcher.next(res).value)
+	.then(res => quoteFetcher.next(res).value)
+	.then(quote => console.log(quote))
+	.catch(err => console.log(err));
