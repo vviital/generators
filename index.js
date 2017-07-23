@@ -1,24 +1,19 @@
-function* createLogger() {
-	console.log('start');
+function* createHello(options) {
+	console.log('options', options);
 
-	yield;
+	const testValue = yield 'first';
 
-	console.log('Second block');
+	console.log('testValue', testValue);
 
+	const word = yield;
 
-	yield;
+	console.log('word', word);
 
-	console.log('Third block');
-
-	yield;
-
-	console.log('end');
+	return 'finish';
 }
 
-const logger = createLogger();
+const hello = createHello('createHello options');
 
-console.log(logger.next());
-console.log(logger.next());
-console.log(logger.next());
-console.log(logger.next());
-console.log(logger.next());
+console.log(hello.next('test value'));
+console.log(hello.next('Max'));
+console.log(hello.next());
