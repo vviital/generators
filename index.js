@@ -1,19 +1,14 @@
-function* createHello(options) {
-	console.log('options', options);
-
-	const testValue = yield 'first';
-
-	console.log('testValue', testValue);
-
-	const word = yield;
-
-	console.log('word', word);
-
-	return 'finish';
+function* createHello() {
+	try {
+		const word = yield;
+		console.log(`Hello ${word}`);
+	} catch (err) {
+		console.log('ERROR', err);
+	}
 }
 
-const hello = createHello('createHello options');
+const hello = createHello();
 
-console.log(hello.next('test value'));
-console.log(hello.next('Max'));
-console.log(hello.next());
+hello.next();
+hello.throw('Something went wrong.');
+hello.next('Max');
