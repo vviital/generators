@@ -7,10 +7,21 @@ function* createQuoteFetcher() {
 	return `${quote.quoteText} - ${quote.quoteAuthor}`;
 }
 
-const quoteFetcher = createQuoteFetcher();
+function coroutine(gen) {
+	const generator = gen();
 
-quoteFetcher.next().value
-	.then(res => quoteFetcher.next(res).value)
-	.then(res => quoteFetcher.next(res).value)
+	function handler(result) {
+		if (result.done) return Promise.resolve(result.value);
+
+		return Promise.resolve(result.value)
+			.then(res => handler(generator.next(res)));
+	}
+
+	return handler(generator.next());
+}
+
+const quoteFetcher = coroutine(createQuoteFetcher);
+
+quoteFetcher
 	.then(quote => console.log(quote))
 	.catch(err => console.log(err));
